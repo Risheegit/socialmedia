@@ -1,0 +1,18 @@
+{% extends 'posts/base.html' %}
+{% block content %}
+<div class = "container">
+    <h3>{{profile.user.username}}'s Followers </h3>
+</div>
+<br></br>
+<p>Total followers: {{no_of_followers}}</p>
+{% for follower in followers %}
+<article classs= "media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <img class = "rounded-circle article-img" src = "{{ follower.profile.profile_pic.url }}" >
+            <a href="{% url 'profile' profile.pk %}">{{ follower.username }}</a>
+        </div>
+    </div>
+    </article>
+{% endfor %}
+{% endblock content %}

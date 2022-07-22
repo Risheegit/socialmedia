@@ -1,0 +1,97 @@
+{% extends "posts/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<article class="media content-section">
+		<img class = "rounded-circle article-img" src = "{{ request.user.profile.profile_pic.url }}" >
+		<div class="media-body">
+			<div class="article-metadata">
+		      <a class="mr-2" href="{% url 'profile' post.op_name.profile.id %}">{{ post.op_name }}</a>
+		      <small class="text-muted">{{ post.pub_date }}</small>
+			  <!-- Making update and delete button -->
+		      {% if post.op_name == user or user.is_staff %}
+		      	<div style="float:  right;">
+		      		<br></br>
+			      	<a class = "edit-color" href = "update/">Update<i class="far fa-edit"></i></a>
+			      	<a class = "edit-color" href = "delete/">Delete<i class="fas fa-trash"></i></a>
+		      	</div>
+		      {% endif %}
+		    </div>
+	    <h2>{{ post.caption }}</h2>
+	    <img  src = "{{ post.image.url}}" >
+	  </div>
+	</article>
+
+	<!-- Make a report button -->
+	<form method = "POST" action = "{% url 'report' post.pk %}">
+		{% csrf_token %}
+		<button class = "btn btn-outline-info" type = "submit">Report</button>
+	</form>
+	<!--Making the comment section -->
+	<h2> Comments </h2>	
+	<br> </br>
+	<!-- Going through comments -->
+	<div>
+		{% for comment in comments %}
+			<article class = "media content-section">
+				<div class = "media-body">
+					<p class = "article-content">
+						<strong>{{comment.username}} -  {{comment.pub_date}}</strong>
+						{{comment.body}}
+					</p>
+					{% if request.user.username == comment.username %}
+					<a href="{% url 'comment_delete' post.pk comment.pk %}">Delete comment<i class="fas fa-trash"></i></a>
+					{% endif %}
+				</div>
+			</article>
+		</div>
+		{% empty %}
+			<p> No comments yet! </p>
+		{% endfor %} 
+	
+	<div>
+		<form method="POST">
+			{% csrf_token %}
+			{{ c_form | crispy }}
+			<div class="d-grid gap-2">
+				<button class = "btn btn-outline-info" type = "submit">Add comment</button>
+			</div>
+		</form>
+	</div>
+
+	
+	<!-- <h2>Comments</h2>
+	<br></br>
+	{% if not comments %}
+		<p>No comments yet. {{reqdid}} </p>
+		<a href = #">Add a comment </a>
+
+	{% else %}
+	{{reqdid}}
+	<a href = "#	">Add One </a>
+	<br></br>
+		
+	
+		
+	 {% endif %} -->
+
+	<!-- {% for comment in comments %}
+	<div class = "comment">
+		<p class = "info">
+			Comment {{forloop.counter}} by {{comment.name}}
+		</p>
+		{{comment.body|linebreaks}}
+	</div>
+	{% empty %}
+		<p> There are no comments yet </p>
+	{% endfor %}
+	{% if new_comment %}
+		<h2>Your comment has been added </h2>
+	{% else %}
+		<h2>Add a new comment</h2>
+		<form action = "." method = "POST">
+			{{ comment_form.as_p }}
+			{% csrf_token %}
+			<p><input type="submit" value="Add comment"></p>
+		</form>
+	{% endif %} -->
+{% endblock content %}

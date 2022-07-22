@@ -1,0 +1,25 @@
+{% extends 'posts/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class = "container">
+    <form method = "GET" action = "{% url 'search' %}">
+        <input type="text" class="form-control" name="query" value="{{ request.GET.query }}">
+          <button type="submit"><i class="fas fa-search"></i></button>
+    </form>
+</div>
+<br></br>
+{% for profile in profile_list %}
+<article classs= "media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <img class = "rounded-circle article-img" src = "{{ request.user.profile.profile_pic.url }}" >
+            <p><a href="{% url 'profile' profile.pk %}">{{ profile.user }}</a></p>
+            {% if profile.location %}
+                <p>{{ profile.location }}</p>
+            {% endif %}
+            <p>Followers: {{ profile.followers.all.count }}</p>
+        </div>
+    </div>
+    </article>
+{% endfor %}
+{% endblock content %}

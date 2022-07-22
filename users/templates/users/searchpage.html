@@ -1,0 +1,38 @@
+{% extends 'posts/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!-- Making the search bar -->
+<div class = "container">
+    <form method = "GET" action = "{% url 'search' %}">
+        <input type="text" class="form-control" name="query" value="{{ request.GET.query }}">
+          <button type="submit"><i class="fas fa-search"></i></button>
+    </form>
+</div>
+<br></br> 
+<!-- Making excel button -->
+{% if user.is_staff %}
+<div>
+    <form method = "GET" action = "{% url 'export' %}">
+        <button type = "submit">Export user data</button>
+    </form>
+</div>
+{% endif %}
+<br></br> 
+<!-- Showing the most popular users -->
+<h3>Frequently Searched </h3>
+<br></br> 
+{% for profile in profiles %}
+<article classs= "media content-section">
+<div class="media-body">
+    <div class="article-metadata">
+        <img class = "rounded-circle article-img" src = "{{ request.user.profile.profile_pic.url }}" >
+        <p><a href="{% url 'profile' profile.pk %}">{{ profile.user }}</a></p>
+        {% if profile.location %}
+            <p>{{ profile.location }}</p>
+        {% endif %}
+        <p>Followers: {{ profile.followers.all.count }}</p>
+    </div>
+</div>
+</article>
+{% endfor %}
+{% endblock content %}
