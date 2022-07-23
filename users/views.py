@@ -1,12 +1,14 @@
 from sre_constants import SUCCESS
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from socialmedia.settings import LOGIN_REDIRECT_URL
 from .models import Profile
 from posts.models import Post
 from django.views import View
 from django.views import generic
 from django.urls import reverse_lazy
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from tempfile import NamedTemporaryFile
@@ -125,28 +127,28 @@ class ProfileView (View):
     #     return render (request, 'users/profile.html')
 
 # Try making it a profile def 
-class ProfileEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Profile
-    # fields = ['name', 'location', 'profile_pic', 'mobile']
-    # template_name = 'users/profile_edit.html'
+# class ProfileEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = Profile
+#     # fields = ['name', 'location', 'profile_pic', 'mobile']
+#     # template_name = 'users/profile_edit.html'
 
-    def get_success_url(self):
-        pk = self.kwargs['pk']
-        return reverse_lazy('profile', kwargs={'pk': pk})
+#     def get_success_url(self):
+#         pk = self.kwargs['pk']
+#         return reverse_lazy('profile', kwargs={'pk': pk})
 
-    def test_func(self):
-        profile = self.get_object()
-        return self.request.user == profile
+#     def test_func(self):
+#         profile = self.get_object()
+#         return self.request.user == profile
     
-    def post (self, request, *args, **kwargs):
-        u_form = UserUpdateForm(instance = request.user)
-        p_form = ProfileUpdateForm(instance = request.user.profile)
-        context = {
-            'u_form': u_form,
-            'p_form': p_form
-        }
-        print('get request works')
-        return render (request, 'users/profile_edit.html', context)
+#     def post (self, request, *args, **kwargs):
+#         u_form = UserUpdateForm(instance = request.user)
+#         p_form = ProfileUpdateForm(instance = request.user.profile)
+#         context = {
+#             'u_form': u_form,
+#             'p_form': p_form
+#         }
+#         print('get request works')
+#         return render (request, 'users/profile_edit.html', context)
 
 class EditProfileView(generic.UpdateView):
     model = Profile
@@ -155,6 +157,7 @@ class EditProfileView(generic.UpdateView):
     # fields = ['profile_pic', 'mobile', 'location', 'bio']
     def post (self, request, *args, **kwargs) :
         form = ProfileUpdateForm(instance = request.user.profile)
+        form.save()
         context = {
             'form': form
         }
@@ -180,6 +183,7 @@ class UserSearch(LoginRequiredMixin, View):
         }
         return render(request, 'users/user_search.html', context)
 
+@login_required 
 def searchpage (request):
     #To find most popular users
     profiles = Profile.objects.order_by('no_of_followers')[:5]
