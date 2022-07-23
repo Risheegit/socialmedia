@@ -25,13 +25,15 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-72!$^%w+!7ah#if(-+cm-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str (os.environ.get('DEBUG')) == "1" #1 is true
+#DEBUG = False
 
-ALLOWED_HOSTS = ['35.91.85.90']
+ALLOWED_HOSTS = ['54.201.51.83', 'localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
     'crispy_forms',
@@ -47,10 +49,13 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+#    'cloudinary_storage',
+ #   'cloudinary',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -179,3 +184,12 @@ EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+
+#CLOUDINARY_STORAGE = {
+ #   'CLOUD_NAME': 'drm8wax6n',
+  #  'API_KEY': '618648687676897',
+   # 'API_SECRET': 'NToHYxu30XvqZNhqMzUXkNJOwmc',
+#}
+
+#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
