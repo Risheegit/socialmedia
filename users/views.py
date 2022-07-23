@@ -157,7 +157,10 @@ class EditProfileView(generic.UpdateView):
     # fields = ['profile_pic', 'mobile', 'location', 'bio']
     def post (self, request, *args, **kwargs) :
         form = ProfileUpdateForm(instance = request.user.profile)
-        form.save()
+	if form.is_valid (): 
+            form.save()
+	else :
+	    print (form.errors)
         context = {
             'form': form
         }
@@ -192,8 +195,7 @@ def searchpage (request):
         'profiles': profiles,
         'user': user
     }
-    return render (request, 'users/searchpage.html', context)
-
+    return render (request, 'users/searchpage.html', context) 
 class ListFollowers(View):
     def get(self, request, pk, *args, **kwargs):
         profile = Profile.objects.get(pk=pk)
