@@ -158,7 +158,7 @@ class EditProfileView(generic.UpdateView):
     def post (self, request, *args, **kwargs) :
         form = ProfileUpdateForm(instance = request.user.profile)
         if form.is_valid() :
-            form = form.save()
+            form.save()
         else :
             print (form.errors)
         context = {
