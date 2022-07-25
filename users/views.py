@@ -49,28 +49,28 @@ def register(request):
     context = { 'form': form, 'profile_form': profile_form }
     return render(request, 'users/register.html', context)
 
-# def profileupdate (request):
-#     if request.method == 'POST':
-#         u_form = UserUpdateForm(request.POST, instance = request.user)
-#         p_form = ProfileUpdateForm( request.POST,
-# 								 	request.FILES,
-# 									instance = request.user.profile)
-#         if u_form.is_valid() and p_form.is_valid():
-#             u_form.save()
-#             p_form.save()
-#             messages.success(request, f'Your account has been updated !')
-#             return redirect('profile')
-#         else:
-#             print(u_form.errors)
-#     else:
-#         u_form = UserUpdateForm(instance = request.user)
-#         p_form = ProfileUpdateForm(instance = request.user.profile)
+def profileupdate (request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance = request.user)
+        p_form = ProfileUpdateForm( request.POST,
+								 	request.FILES,
+									instance = request.user.profile)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f'Your account has been updated !')
+            return redirect('profile')
+        else:
+            print(u_form.errors)
+    else:
+        u_form = UserUpdateForm(instance = request.user)
+        p_form = ProfileUpdateForm(instance = request.user.profile)
 		
-#     context = {
-# 		'u_form': u_form,
-# 		'p_form': p_form,
-# 	}
-#     return render(request, 'users/profile.html', context)
+    context = {
+		'u_form': u_form,
+		'p_form': p_form,
+	}
+    return render(request, 'users/edit_profile.html', context)
 
 # class UserEditView(generic.UpdateView):
 #     form_class = UserChangeForm
@@ -150,30 +150,30 @@ class ProfileView (View):
 #         print('get request works')
 #         return render (request, 'users/profile_edit.html', context)
 
-class EditProfileView(generic.UpdateView):
-    model = Profile
-    # template_name = 'users/edit_profile.html'
-    form_class = ProfileUpdateForm
-    # fields = ['profile_pic', 'mobile', 'location', 'bio']
-    def post (self, request, *args, **kwargs) :
-        form = ProfileUpdateForm(instance = request.user.profile)
-        if form.is_valid() :
-            form.save()
-        else :
-            print (form.errors)
-        context = {
-            'form': form
-        }
-        # success_url = 'home'
-        return render (request, 'users/edit_profile.html', context )
+# class EditProfileView(generic.UpdateView):
+#     model = Profile
+#     # template_name = 'users/edit_profile.html'
+#     form_class = ProfileUpdateForm
+#     # fields = ['profile_pic', 'mobile', 'location', 'bio']
+#     def post (self, request, *args, **kwargs) :
+#         form = ProfileUpdateForm(instance = request.user.profile)
+#         if form.is_valid() :
+#             form.save()
+#         else :
+#             print (form.errors)
+#         context = {
+#             'form': form
+#         }
+#         # success_url = 'home'
+#         return render (request, 'users/edit_profile.html', context )
 
-    def get_success_url(self):
-        pk = self.kwargs['pk']
-        return reverse_lazy('profile', kwargs={'pk': pk})
+#     def get_success_url(self):
+#         pk = self.kwargs['pk']
+#         return reverse_lazy('profile', kwargs={'pk': pk})
 
-    def test_func(self):
-        profile = self.get_object()
-        return self.request.user == profile
+#     def test_func(self):
+#         profile = self.get_object()
+#         return self.request.user == profile
 
 class UserSearch(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -232,3 +232,4 @@ def exportToExcel (request):
 
 #Make a mutuals view (ie if person in profile.follwers and request.user.followers then  mutaul +=1 where 
 # profile = Profile.objects.filter(pk = pk))
+

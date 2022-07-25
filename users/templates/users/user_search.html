@@ -12,7 +12,7 @@
 <article classs= "media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <img class = "rounded-circle article-img" src = "{{ request.user.profile.profile_pic.url }}" >
+            <img class = "rounded-circle article-img" src = "{{ profile.profile_pic.url }}" >
             <p><a href="{% url 'profile' profile.pk %}">{{ profile.user }}</a></p>
             {% if profile.location %}
                 <p>{{ profile.location }}</p>
