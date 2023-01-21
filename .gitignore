@@ -1,1 +1,7 @@
 .env
+
+.vscode
+data.json
+datadump.json
+db.sqlite3
+__pycache__/
