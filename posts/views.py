@@ -69,7 +69,6 @@ class PostCreateView (LoginRequiredMixin, CreateView):
 		form.instance.op_name = self.request.user
 		return super().form_valid(form)
 
-#Update is not showing properly
 class PostUpdateView (LoginRequiredMixin, UserPassesTestMixin,  UpdateView):
 	model = Post
 	fields = ['caption', 'image']
